@@ -1,1 +1,9 @@
 *~
+
+# config files
+conf.d/backup
+conf.d/rsync-rules
+
+# IntelliJ
+*.iml
+.idea/
