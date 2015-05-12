@@ -19,7 +19,8 @@
 ### MySQL Configuration Variables ###
 #####################################
 
-. /etc/conf.d/backup
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+. ${SCRIPT_DIR}/conf.d/backup
 
 # Local directory for dump files
 MYSQL_BACKUP_DIR=/var/backups/mysql/

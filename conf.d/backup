@@ -35,7 +35,7 @@ DST=${HOSTNAME}
 
 # Binaries
 # (uncomment ECHO to achieve a "dry run" effect)
-#ECHO="/bin/echo"
+ECHO="/bin/echo"
 MYSQLDUMP="${ECHO} /usr/bin/mysqldump"
 BZIP2="${ECHO} /bin/bzip2"
 SSH="${ECHO} /usr/bin/ssh"
