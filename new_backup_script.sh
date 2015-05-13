@@ -15,19 +15,21 @@ do
     . "${confFile}"
 done
 
-# mutable command function
-function mcf {
-    [[ $TEST -gt 0 ]] && echo echo ${@:1} || echo ${@:1}
-}
+if [[ $TEST -ne 0 ]]
+then
+    export ECHO=echo
+fi
 
 function full_date {
-    eval date +'%Y-%m-%d.%H:%M:%S'
+    eval date +'%Y-%m-%d.%H.%M.%S'
 }
 
-export -f mcf
 export -f full_date
 
 OUTPUT_DIR="${LOCAL_DESTINATION}/${HOSTNAME}"
+
+# create backup directory
+mkdir -p "$OUTPUT_DIR"
 
 # put lock
 PIDFILE="$OUTPUT_DIR/pidfile.pid"
@@ -42,9 +44,6 @@ if [ -s $PIDFILE ]; then
 fi
 
 echo $$ > $PIDFILE
-
-# create backup directory
-mkdir -p "$OUTPUT_DIR"
 
 for scriptFile in `ls ${SCRIPT_DIR}/*.sh`
 do

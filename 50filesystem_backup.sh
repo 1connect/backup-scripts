@@ -8,9 +8,13 @@ RSYNCOPTS+=" --chmod=u+rwx"
 
 RULES="$CONFIG_DIR/$FILESYSTEM_RULES_FILE"
 
-# do the backup itself (run a few times, since failing here kills the chain)
-for i in `seq 1 $FILESYSTEM_RUN_COUNT`
+
+for directory in $FILESYSTEM_SRC_DIRECTORIES
 do
-  # todo opcje
-  exec $(mcf rsync) ${RSYNCOPTS} --filter="merge $RULES" / ./
+    # do the backup itself (run a few times, since failing here kills the chain)
+    for i in `seq 1 $FILESYSTEM_RUN_COUNT`
+    do
+        # todo opcje i ten katalog końcowy
+        $ECHO rsync ${RSYNCOPTS} --filter="merge $RULES" $directory `pwd`/$directory
+    done
 done

@@ -15,9 +15,6 @@
 #
 ##########################################################################
 
-DATE=`eval date +%Y-%m-%d`
-NOW=`date +'%Y-%m-%d.%H:%M:%S'`
-
 DBS=`mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD}  -h${MYSQL_HOST}  -e "show databases"`
 
 for DATABASE in $DBS
@@ -26,21 +23,21 @@ do
                 echo "Dumping $DATABASE now..."
 								#BASE=${DATE}.${DATABASE}
 								BASE=${DATABASE}
-                exec $(mcf mysqldump) -u${MYSQL_USER} \
+                $ECHO mysqldump -u${MYSQL_USER} \
                 -p${MYSQL_PASSWORD} \
                 -h{MYSQL_HOST} \
                 --lock-tables --add-drop-table --skip-dump-date \
                 -e $DATABASE > ${BASE}.sql
 
-                exec $(mcf bzip2) -f9 ${BASE}.sql
-                exec $(mcf chmod) 0400 ${BASE}.sql.bz2
+                $ECHO bzip2 -f9 ${BASE}.sql
+                $ECHO chmod 0400 ${BASE}.sql.bz2
         fi
 done
 
 # Delete files older than 21 days
 for i in `find . -mtime +21|sort`
 do
-    exec $(mcf rm) $i
+    $ECHO rm $i
 done
 
 exit 0
