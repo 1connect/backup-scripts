@@ -57,7 +57,7 @@ if [ -s $PIDFILE ]; then
   fi
 fi
 
-$ECHO echo $$ > $PIDFILE
+[[ $ECHO != '' ]] && echo "echo $$ > $PIDFILE" || echo $$ > $PIDFILE
 
 for scriptFile in `ls ${SCRIPT_DIR}/*.sh`
 do
@@ -79,7 +79,9 @@ do
         [[ $VERBOSE -ne 0 ]] && echo "* running $scriptName"
 
         currentDir=`pwd`
-        cd $SCRIPT_OUTPUT_DIR && bash $scriptFile ; cd $currentDir
+        cd $SCRIPT_OUTPUT_DIR
+	bash $scriptFile
+	cd $currentDir
     fi
 done
 
