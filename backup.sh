@@ -5,8 +5,8 @@
 # 05.2015 Michał Słomkowski
 #
 
-export TEST=1
-export VERBOSE=1
+export TEST=0
+export VERBOSE=0
 SIDESCRIPTS_ONLY=0
 
 function show_help {
@@ -87,22 +87,29 @@ done
 
 # Options to use for rsync
 # (also see http://www.sanitarium.net/golug/rsync_backups.html)
-RSYNCOPTS="--archive --hard-links --one-file-system"
-RSYNCOPTS+="--delete --delete-excluded --numeric-ids"
+RSYNCOPTS="--archive --hard-links --one-file-system "
+RSYNCOPTS+="--delete --delete-excluded --numeric-ids "
 
-[[ $VERBOSE -ne 0 ]] && RSYNCOPTIONS+=" --verbose --progress"
+[[ $VERBOSE -ne 0 ]] && RSYNCOPTIONS+=" --verbose --info=progress2"
 
 RSYNC_RULES="$CONFIG_DIR/$RSYNC_RULES_FILE"
 
-if [[ $SIDESCRIPTS_ONLY -ne 0 ]]
+if [[ $SIDESCRIPTS_ONLY -eq 0 ]]
 then
     for directory in $SRC_DIRECTORIES
     do
+        out="$DESTINATION/$HOSTNAME"
+        if [[ `basename $directory` == '/' ]]
+        then
+            out+="/rootdir"
+        else
+            out+=`basename $directory | tr '/' '__' `
+        fi
+
         # do the backup itself (run a few times, since failing here kills the chain)
         for i in `seq 1 $RSYNC_RUN_COUNT`
         do
-            # todo opcje i ten katalog końcowy
-            $ECHO rsync ${RSYNCOPTS} --filter="merge $RSYNC_RULES" $directory $DESTINATION
+            $ECHO rsync ${RSYNCOPTS} --filter="merge $RSYNC_RULES" $directory $out
         done
     done
 fi
