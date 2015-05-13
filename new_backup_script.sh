@@ -45,6 +45,13 @@ do
     if [[ `basename $scriptFile` =~ ([0-9]+?)([a-z]+)(_backup\.sh) ]]
     then
         scriptName=${BASH_REMATCH[2]}
+        scriptEnabledVariableName=`echo $scriptName | tr [a-z] [A-Z]`_ENABLED
+
+        if [[ ${!scriptEnabledVariableName} -eq 0 ]]
+        then
+            continue
+        fi
+
         export SCRIPT_OUTPUT_DIR="$OUTPUT_DIR/$scriptName"
 
         mkdir -p $SCRIPT_OUTPUT_DIR
