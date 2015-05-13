@@ -7,9 +7,10 @@
 
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 HOSTNAME=`hostname`
+export CONFIG_DIR="${SCRIPT_DIR}/conf.d"
 
 # load all config files
-for confFile in `ls ${SCRIPT_DIR}/conf.d/*.sh`
+for confFile in `ls ${CONFIG_DIR}/*.sh`
 do
     . "${confFile}"
 done
