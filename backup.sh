@@ -30,7 +30,7 @@ while getopts "h?vts" opt; do
 done
 
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-HOSTNAME=`hostname`
+export HOSTNAME=`hostname`
 export CONFIG_DIR="${SCRIPT_DIR}/conf.d"
 
 # load all config files
@@ -90,16 +90,18 @@ done
 RSYNCOPTS="--archive --hard-links --one-file-system "
 RSYNCOPTS+="--delete --delete-excluded --numeric-ids "
 
-if [[ $VERBOSE -ne 0 ]]
-then
-    RSYNCOPTIONS+=" --verbose --progress"
-    echo "* starting rsync"
-fi
+
 
 RSYNC_RULES="$CONFIG_DIR/$RSYNC_RULES_FILE"
 
 if [[ $SIDESCRIPTS_ONLY -eq 0 ]]
 then
+    if [[ $VERBOSE -ne 0 ]]
+    then
+        RSYNCOPTIONS+=" --verbose --progress"
+        echo "* starting rsync"
+    fi
+
     for directory in $SRC_DIRECTORIES
     do
         out="$DST_DIRECTORY/$HOSTNAME"
