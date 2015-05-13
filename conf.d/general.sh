@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-export TEST=1
-
-export VERBOSE=1
-
 # todo
 export SIDE_SCRIPTS_DESTINATION="/tmp/adds"
 

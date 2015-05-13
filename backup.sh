@@ -5,6 +5,29 @@
 # 05.2015 Michał Słomkowski
 #
 
+export TEST=1
+export VERBOSE=1
+SIDESCRIPTS_ONLY=0
+
+function show_help {
+    echo "Usage: blablabla"
+}
+
+while getopts "h?vts" opt; do
+    case "$opt" in
+    h|\?)
+        show_help
+        exit 0
+        ;;
+    v)  export VERBOSE=1
+        ;;
+    t)  export TEST=1
+        ;;
+    s)  SIDESCRIPTS_ONLY=1
+        ;;
+    esac
+done
+
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 HOSTNAME=`hostname`
 export CONFIG_DIR="${SCRIPT_DIR}/conf.d"
@@ -42,7 +65,7 @@ echo $$ > $PIDFILE
 
 for scriptFile in `ls ${SCRIPT_DIR}/*.sh`
 do
-    if [[ `basename $scriptFile` =~ ([0-9]+?)([a-z]+)(_backup\.sh) ]]
+    if [[ `basename $scriptFile` =~ ([0-9]+?)([a-z]+)(_sidescript\.sh) ]]
     then
         scriptName=${BASH_REMATCH[2]}
         scriptEnabledVariableName=`echo $scriptName | tr [a-z] [A-Z]`_ENABLED
@@ -71,15 +94,18 @@ RSYNCOPTS+="--delete --delete-excluded --numeric-ids"
 
 RSYNC_RULES="$CONFIG_DIR/$RSYNC_RULES_FILE"
 
-for directory in $SRC_DIRECTORIES
-do
-    # do the backup itself (run a few times, since failing here kills the chain)
-    for i in `seq 1 $RSYNC_RUN_COUNT`
+if [[ $SIDESCRIPTS_ONLY -ne 0 ]]
+then
+    for directory in $SRC_DIRECTORIES
     do
-        # todo opcje i ten katalog końcowy
-        $ECHO rsync ${RSYNCOPTS} --filter="merge $RSYNC_RULES" $directory `pwd`/$directory
+        # do the backup itself (run a few times, since failing here kills the chain)
+        for i in `seq 1 $RSYNC_RUN_COUNT`
+        do
+            # todo opcje i ten katalog końcowy
+            $ECHO rsync ${RSYNCOPTS} --filter="merge $RSYNC_RULES" $directory $DESTINATION
+        done
     done
-done
+fi
 
 # TODO sychronize backup with onedrive etc
 
