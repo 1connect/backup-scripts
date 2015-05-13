@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # todo
-export SIDE_SCRIPTS_DESTINATION="/tmp/adds"
+export SIDE_SCRIPTS_DESTINATION="/backup"
 
-export DST_REMOTE=''
-export DST_DIRECTORY='/tmp/backup'
+export DST_REMOTE='root@example.org'
+export DST_DIRECTORY='/backup'
 
 # they shoud match with the filesystem mount points
 export SRC_DIRECTORIES="/ /boot"
