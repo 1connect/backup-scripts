@@ -3,6 +3,7 @@
 DBS=`mysql -e "show databases"`
 
 MYSQL_OPTIONS="--skip-dump-date --routines --flush-privileges"
+MYSQL_OPTIONS=" --ignore-table=mysql.event --single-transaction"
 
 [[ $VERBOSE -ne 0 ]] && MYSQL_OPTIONS+=" --verbose"
 
