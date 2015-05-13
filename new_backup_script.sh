@@ -26,13 +26,8 @@ function full_date {
 
 export -f full_date
 
-OUTPUT_DIR="${LOCAL_DESTINATION}/${HOSTNAME}"
-
-# create backup directory
-mkdir -p "$OUTPUT_DIR"
-
 # put lock
-PIDFILE="$OUTPUT_DIR/pidfile.pid"
+PIDFILE="/tmp/backup_scripts.pid"
 
 if [ -s $PIDFILE ]; then
   PID=$(cat $PIDFILE)
@@ -57,7 +52,7 @@ do
             continue
         fi
 
-        export SCRIPT_OUTPUT_DIR="$OUTPUT_DIR/$scriptName"
+        export SCRIPT_OUTPUT_DIR="${SIDE_SCRIPTS_DESTINATION}/${scriptName}"
 
         mkdir -p $SCRIPT_OUTPUT_DIR
         rm -rf $SCRIPT_OUTPUT_DIR/*
@@ -65,6 +60,25 @@ do
         currentDir=`pwd`
         cd $SCRIPT_OUTPUT_DIR && bash $scriptFile ; cd $currentDir
     fi
+done
+
+# Options to use for rsync
+# (also see http://www.sanitarium.net/golug/rsync_backups.html)
+RSYNCOPTS="--archive --hard-links --one-file-system"
+RSYNCOPTS+="--delete --delete-excluded --numeric-ids"
+
+[[ $VERBOSE -ne 0 ]] && RSYNCOPTIONS+=" --verbose --progress"
+
+RSYNC_RULES="$CONFIG_DIR/$RSYNC_RULES_FILE"
+
+for directory in $SRC_DIRECTORIES
+do
+    # do the backup itself (run a few times, since failing here kills the chain)
+    for i in `seq 1 $RSYNC_RUN_COUNT`
+    do
+        # todo opcje i ten katalog końcowy
+        $ECHO rsync ${RSYNCOPTS} --filter="merge $RSYNC_RULES" $directory `pwd`/$directory
+    done
 done
 
 # TODO sychronize backup with onedrive etc
