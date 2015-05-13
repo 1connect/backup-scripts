@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 DBS=`mysql -e "show databases"`
 
@@ -11,12 +11,17 @@ do
     if [[ $DATABASE != "Database" ]]
     then
         [[ $VERBOSE -ne 0 ]] && echo "Dumping $DATABASE now..."
-        BASE="database-${DATABASE}-$(full_date).sql"
+        BASE="$(full_date)-db-${DATABASE}.sql"
         $ECHO mysqldump $MYSQL_OPTIONS -e $DATABASE --result-file=${BASE}
 
         $ECHO bzip2 -f9 ${BASE}
         $ECHO chmod 0400 ${BASE}.bz2
     fi
+done
+
+for i in `find . -mtime +${MYSQL_DELETE_FILES_OLDER_THAN} | sort`
+do
+    $ECHO rm $i
 done
 
 exit 0
