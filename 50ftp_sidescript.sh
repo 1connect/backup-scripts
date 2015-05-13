@@ -2,19 +2,22 @@
 
 cd ..
 
-ARCHIVE=`/tmp/databases-$(full_date).tar`
-tar -cf $ARCHIVE *
-bzip2 $ARCHIVE
+$ECHO rmdir ftp
+
+ARCHIVE="/tmp/databases-$(full_date).tar"
+
+$ECHO tar -cf $ARCHIVE *
+$ECHO bzip2 $ARCHIVE
 
 cd /tmp
 
 $ECHO ftp -n $FTP_HOST << END_SCRIPT
-user $FTP_LOGIN
-$FTP_PASSWORD
-put $ARCHIVE
+user $FTP_LOGIN $FTP_PASSWORD
+put `basename $ARCHIVE.bz2`
 quit
 END_SCRIPT
 
-rm $ARCHIVE
+$ECHO rm $ARCHIVE.bz2
 
 exit 0
+
