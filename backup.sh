@@ -76,6 +76,8 @@ do
         $ECHO mkdir -p $SCRIPT_OUTPUT_DIR
         $ECHO rm -rf $SCRIPT_OUTPUT_DIR/*
 
+        [[ $VERBOSE -ne 0 ]] && echo "* running $scriptName"
+
         currentDir=`pwd`
         cd $SCRIPT_OUTPUT_DIR && bash $scriptFile ; cd $currentDir
     fi
@@ -86,7 +88,11 @@ done
 RSYNCOPTS="--archive --hard-links --one-file-system "
 RSYNCOPTS+="--delete --delete-excluded --numeric-ids "
 
-[[ $VERBOSE -ne 0 ]] && RSYNCOPTIONS+=" --verbose --info=progress2"
+if [[ $VERBOSE -ne 0 ]]
+then
+    RSYNCOPTIONS+=" --verbose --progress"
+    echo "* starting rsync"
+fi
 
 RSYNC_RULES="$CONFIG_DIR/$RSYNC_RULES_FILE"
 

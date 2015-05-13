@@ -10,7 +10,7 @@ for DATABASE in $DBS
 do
     if [[ $DATABASE != "Database" ]]
     then
-        [[ $VERBOSE -ne 0 ]] && echo "Dumping $DATABASE now..."
+        [[ $VERBOSE -ne 0 ]] && echo "* dumping $DATABASE database"
         BASE="$(full_date)-db-${DATABASE}.sql"
         $ECHO mysqldump $MYSQL_OPTIONS -e $DATABASE --result-file=${BASE}
 
@@ -22,6 +22,7 @@ done
 for i in `find . -mtime +${MYSQL_DELETE_FILES_OLDER_THAN} | sort`
 do
     $ECHO rm $i
+    [[ $VERBOSE -ne 0 ]] && echo "* removed $i"
 done
 
 exit 0
