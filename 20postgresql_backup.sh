@@ -5,10 +5,7 @@ DATABASES=$(sudo -u $POSTGRESQL_SUDO_USER psql -tqc 'SELECT datname FROM pg_data
 
 PG_OPTIONS="--clean "
 
-if [[ $VERBOSE -ne 0 ]]
-then
-    PG_OPTIONS+=" --verbose"
-fi
+[[ $VERBOSE -ne 0 ]] &&  PG_OPTIONS+=" --verbose"
 
 $ECHO chown postgres .
 

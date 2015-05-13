@@ -2,12 +2,12 @@
 
 # Options to use for rsync
 # (also see http://www.sanitarium.net/golug/rsync_backups.html)
-RSYNCOPTS="--verbose --archive --hard-links --progress"
-RSYNCOPTS+=" --delete --delete-excluded --numeric-ids --compress"
-RSYNCOPTS+=" --chmod=u+rwx"
+RSYNCOPTS="--archive --hard-links --one-file-system"
+RSYNCOPTS+="--delete --delete-excluded --numeric-ids"
+
+[[ $VERBOSE -ne 0 ]] && RSYNCOPTIONS+=" --verbose --progress"
 
 RULES="$CONFIG_DIR/$FILESYSTEM_RULES_FILE"
-
 
 for directory in $FILESYSTEM_SRC_DIRECTORIES
 do
