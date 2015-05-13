@@ -3,7 +3,8 @@
 # todo
 export SIDE_SCRIPTS_DESTINATION="/tmp/adds"
 
-export DESTINATION="/tmp/backup"
+export DST_REMOTE=''
+export DST_DIRECTORY='/tmp/backup'
 
 # they shoud match with the filesystem mount points
 export SRC_DIRECTORIES="/ /boot"

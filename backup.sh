@@ -100,18 +100,27 @@ if [[ $SIDESCRIPTS_ONLY -eq 0 ]]
 then
     for directory in $SRC_DIRECTORIES
     do
-        out="$DESTINATION/$HOSTNAME"
+        out="$DST_DIRECTORY/$HOSTNAME"
         if [[ `basename $directory` == '/' ]]
         then
             out+="/rootdir"
         else
             out+=/`basename $directory | tr '/' '__' `
         fi
-        $ECHO mkdir -p $out
+
+        if [[ DST_REMOTE != '' ]]
+        then
+            $ECHO ssh $DST_REMOTE "mkdir -p $out"
+            fullPath="$DST_REMOTE:$out"
+        else
+            $ECHO mkdir -p $out
+            fullPath=$out
+        fi
+
         # do the backup itself (run a few times, since failing here kills the chain)
         for i in `seq 1 $RSYNC_RUN_COUNT`
         do
-            $ECHO rsync ${RSYNCOPTS} --filter="merge $RSYNC_RULES" $directory $out
+            $ECHO rsync ${RSYNCOPTS} --filter="merge $RSYNC_RULES" $directory $fullPath
         done
     done
 fi
