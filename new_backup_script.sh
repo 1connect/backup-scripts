@@ -19,7 +19,13 @@ done
 function mcf {
     [[ $TEST -gt 0 ]] && echo echo ${@:1} || echo ${@:1}
 }
+
+function full_date {
+    eval date +'%Y-%m-%d.%H:%M:%S'
+}
+
 export -f mcf
+export -f full_date
 
 OUTPUT_DIR="${LOCAL_DESTINATION}/${HOSTNAME}"
 
