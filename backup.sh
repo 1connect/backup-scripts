@@ -22,6 +22,7 @@ while getopts "h?vts" opt; do
     v)  export VERBOSE=1
         ;;
     t)  export TEST=1
+        export ECHO=echo
         ;;
     s)  SIDESCRIPTS_ONLY=1
         ;;
@@ -37,11 +38,6 @@ for confFile in `ls ${CONFIG_DIR}/*.sh`
 do
     . "${confFile}"
 done
-
-if [[ $TEST -ne 0 ]]
-then
-    export ECHO=echo
-fi
 
 function full_date {
     eval date +'%Y-%m-%d.%H.%M.%S'
@@ -61,7 +57,7 @@ if [ -s $PIDFILE ]; then
   fi
 fi
 
-echo $$ > $PIDFILE
+$ECHO echo $$ > $PIDFILE
 
 for scriptFile in `ls ${SCRIPT_DIR}/*.sh`
 do
@@ -77,8 +73,8 @@ do
 
         export SCRIPT_OUTPUT_DIR="${SIDE_SCRIPTS_DESTINATION}/${scriptName}"
 
-        mkdir -p $SCRIPT_OUTPUT_DIR
-        rm -rf $SCRIPT_OUTPUT_DIR/*
+        $ECHO mkdir -p $SCRIPT_OUTPUT_DIR
+        $ECHO rm -rf $SCRIPT_OUTPUT_DIR/*
 
         currentDir=`pwd`
         cd $SCRIPT_OUTPUT_DIR && bash $scriptFile ; cd $currentDir
@@ -103,9 +99,9 @@ then
         then
             out+="/rootdir"
         else
-            out+=`basename $directory | tr '/' '__' `
+            out+=/`basename $directory | tr '/' '__' `
         fi
-
+        $ECHO mkdir -p $out
         # do the backup itself (run a few times, since failing here kills the chain)
         for i in `seq 1 $RSYNC_RUN_COUNT`
         do
@@ -117,4 +113,4 @@ fi
 # TODO sychronize backup with onedrive etc
 
 # remove lock
-rm $PIDFILE
+$ECHO rm $PIDFILE
