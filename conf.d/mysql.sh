@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-MYSQL_USER=user
-MYSQL_PASSWORD=pass
-MYSQL_HOST=localhost
+export MYSQL_USER=user
+export MYSQL_PASSWORD=pass
+export MYSQL_HOST=localhost

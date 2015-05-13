@@ -15,26 +15,10 @@
 #
 ##########################################################################
 
-#####################################
-### MySQL Configuration Variables ###
-#####################################
-
-exit 0
-
-# Local directory for dump files
-MYSQL_BACKUP_DIR=/var/backups/mysql/
-
-#####################################
-### Edit Below If Necessary ######### 
-#####################################
-cd $MYSQL_BACKUP_DIR
 DATE=`eval date +%Y-%m-%d`
 NOW=`date +'%Y-%m-%d.%H:%M:%S'`
 
-# Optimize the table structure nightly
-#mysqlcheck -u$DBUSER -p$DBPASSWD -h$DBHOST -oA
-
-DBS=`mysql -u$DB_USER -p$DB_PASS -h$DB_HOST -e"show databases"`
+DBS=`mysql -u${MYSQL_USER} -p${MYSQL_PASSWORD}  -h${MYSQL_HOST}  -e "show databases"`
 
 for DATABASE in $DBS
 do
@@ -42,17 +26,21 @@ do
                 echo "Dumping $DATABASE now..."
 								#BASE=${DATE}.${DATABASE}
 								BASE=${DATABASE}
-                ${MYSQLDUMP} -u$DB_USER -p$DB_PASS -h$DB_HOST --lock-tables --add-drop-table --skip-dump-date -e $DATABASE > ${BASE}.sql
+                exec $(mcf mysqldump) -u${MYSQL_USER} \
+                -p${MYSQL_PASSWORD} \
+                -h{MYSQL_HOST} \
+                --lock-tables --add-drop-table --skip-dump-date \
+                -e $DATABASE > ${BASE}.sql
 
-                ${BZIP2} -f9 ${BASE}.sql
-                chmod 0400 ${BASE}.sql.bz2
-                #7za a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on ${BASE}.7z ${BASE}.sql && rm ${BASE}.sql
-                #chmod 0400 ${BASE}.7z
-
+                exec $(mcf bzip2) -f9 ${BASE}.sql
+                exec $(mcf chmod) 0400 ${BASE}.sql.bz2
         fi
 done
 
 # Delete files older than 21 days
-for i in `find $MYSQL_BACKUP_DIR -mtime +21|sort`; do (rm $i); done;
+for i in `find . -mtime +21|sort`
+do
+    exec $(mcf rm) $i
+done
 
 exit 0

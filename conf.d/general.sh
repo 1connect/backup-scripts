@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
-LOCAL_DESTINATION="/tmp/backup"
+export TEST=1
+
+export LOCAL_DESTINATION="/tmp/backup"
 
 

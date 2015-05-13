@@ -14,6 +14,12 @@ do
     . "${confFile}"
 done
 
+# mutable command function
+function mcf {
+    [[ $TEST -gt 0 ]] && echo echo ${@:1} || echo ${@:1}
+}
+export -f mcf
+
 OUTPUT_DIR="${LOCAL_DESTINATION}/${HOSTNAME}"
 
 # put lock
@@ -43,7 +49,8 @@ do
         mkdir -p $SCRIPT_OUTPUT_DIR
         rm -rf $SCRIPT_OUTPUT_DIR/*
 
-        cd $SCRIPT_OUTPUT_DIR && bash $scriptFile ; cd - > /dev/null
+        currentDir=`pwd`
+        cd $SCRIPT_OUTPUT_DIR && bash $scriptFile ; cd $currentDir
     fi
 done
 
