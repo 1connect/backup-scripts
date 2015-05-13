@@ -2,7 +2,7 @@
 
 # config files
 conf.d/*
--conf.d/*.example
+!conf.d/*.example
 
 # IntelliJ
 *.iml

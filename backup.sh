@@ -40,7 +40,7 @@ do
 done
 
 function full_date {
-    eval date +'%Y-%m-%d.%H.%M.%S'
+    eval date +'%Y-%m-%d.%H.%M'
 }
 
 export -f full_date
