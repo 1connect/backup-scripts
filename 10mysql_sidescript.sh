@@ -2,8 +2,8 @@
 
 DBS=`mysql -e "show databases"`
 
-MYSQL_OPTIONS="--skip-dump-date --routines --flush-privileges"
-MYSQL_OPTIONS=" --ignore-table=mysql.event --single-transaction"
+MYSQL_OPTIONS="--skip-dump-date --routines --flush-privileges --add-drop-database "
+MYSQL_OPTIONS+=" --ignore-table=mysql.event --single-transaction --extended-insert"
 
 [[ $VERBOSE -ne 0 ]] && MYSQL_OPTIONS+=" --verbose"
 
@@ -13,7 +13,7 @@ do
     then
         [[ $VERBOSE -ne 0 ]] && echo "* dumping $DATABASE database"
         BASE="$(full_date)-db-${DATABASE}.sql"
-        $ECHO mysqldump $MYSQL_OPTIONS -e $DATABASE --result-file=${BASE}
+        $ECHO mysqldump $MYSQL_OPTIONS --databases $DATABASE --result-file=${BASE}
 
         $ECHO bzip2 -f9 ${BASE}
         $ECHO chmod 0400 ${BASE}.bz2
