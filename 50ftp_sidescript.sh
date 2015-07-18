@@ -7,7 +7,10 @@ $ECHO rmdir ftp
 
 ARCHIVE="/tmp/db-${HOSTNAME}-`date +%Y-%m-%d`_`date +%s`.tar"
 
-$ECHO tar -cf $ARCHIVE *
+# find files modified during last 2 hours
+NEW_FILES=`find . -type f -mmin -120 | cut -sd / -f 2-`
+
+$ECHO tar -cf $ARCHIVE $NEW_FILES
 $ECHO bzip2 $ARCHIVE
 
 cd /tmp
