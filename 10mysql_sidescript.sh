@@ -7,12 +7,15 @@ MYSQL_OPTIONS+=" --ignore-table=mysql.event --single-transaction --extended-inse
 
 [[ $VERBOSE -ne 0 ]] && MYSQL_OPTIONS+=" --verbose"
 
+DATE="$(full_date)"
+$ECHO mkdir $DATE
+
 for DATABASE in $DBS
 do
     if [[ $DATABASE != "Database" ]]
     then
         [[ $VERBOSE -ne 0 ]] && echo "* dumping $DATABASE database"
-        BASE="$(full_date)-db-${DATABASE}.sql"
+        BASE="${DATE}/${DATE}-db-${DATABASE}.sql"
         $ECHO mysqldump $MYSQL_OPTIONS --databases $DATABASE --result-file=${BASE}
 
         $ECHO bzip2 -f9 ${BASE}
@@ -20,9 +23,9 @@ do
     fi
 done
 
-for i in `find . -mtime +${MYSQL_DELETE_FILES_OLDER_THAN} | sort`
+for i in `find . -type d -mtime +${MYSQL_DELETE_FILES_OLDER_THAN} | sort`
 do
-    $ECHO rm $i
+    $ECHO rm -r $i
     [[ $VERBOSE -ne 0 ]] && echo "* removed $i"
 done
 

@@ -74,14 +74,13 @@ do
         export SCRIPT_OUTPUT_DIR="${SIDE_SCRIPTS_DESTINATION}/${scriptName}"
 
         $ECHO mkdir -p $SCRIPT_OUTPUT_DIR
-        $ECHO rm -rf $SCRIPT_OUTPUT_DIR/*
 
         [[ $VERBOSE -ne 0 ]] && echo "* running $scriptName"
 
         currentDir=`pwd`
         cd $SCRIPT_OUTPUT_DIR
-	bash $scriptFile
-	cd $currentDir
+	    bash $scriptFile
+	    cd $currentDir
     fi
 done
 

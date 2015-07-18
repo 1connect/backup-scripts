@@ -7,23 +7,25 @@ PG_OPTIONS="--clean "
 
 [[ $VERBOSE -ne 0 ]] &&  PG_OPTIONS+=" --verbose"
 
-$ECHO chown postgres .
+DATE="$(full_date)"
+$ECHO mkdir $DATE
+$ECHO chown -R postgres .
 
 # dump globals
-$INVOCATION pg_dumpall $PG_OPTIONS --globals-only -f $(full_date)-globals.sql
+$INVOCATION pg_dumpall $PG_OPTIONS --globals-only -f ${DATE}/${DATE}-globals.sql
 
 for d in $DATABASES
 do
     [[ $VERBOSE -ne 0 ]] && echo "* dumping $d database"
-    fileName="$(full_date)-db-$d.sql"
+    fileName="${DATE}/${DATE}-db-$d.sql"
     $INVOCATION pg_dump $PG_OPTIONS --create -f $fileName $d
     $ECHO bzip2 -f9 ${fileName}
     $ECHO chmod 0400 ${fileName}.bz2
 done
 
-for i in `find . -mtime +${POSTGRESQL_DELETE_FILES_OLDER_THAN} | sort`
+for i in `find . -type d -mtime +${POSTGRESQL_DELETE_FILES_OLDER_THAN} | sort`
 do
-    $ECHO rm $i
+    $ECHO rm -r $i
     [[ $VERBOSE -ne 0 ]] && echo "* removed $i"
 done
 
