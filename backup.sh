@@ -2,7 +2,7 @@
 
 #
 # server backup script
-# 05.2015 Michał Słomkowski
+# 2015 Michał Słomkowski
 #
 
 export TEST=0
@@ -94,6 +94,7 @@ then
         echo "* starting attic backup"
     fi
 
+    $ECHO mkdir -p $DST_LOCAL_MOUNT_POINT
     $ECHO sshfs $DST_REMOTE_LOCATION $DST_LOCAL_MOUNT_POINT
 
     for directory in $SRC_DIRECTORIES
@@ -138,6 +139,7 @@ then
     done
 
     $ECHO umount $DST_LOCAL_MOUNT_POINT
+    $ECHO rmdir $DST_LOCAL_MOUNT_POINT
 fi
 
 # remove lock
