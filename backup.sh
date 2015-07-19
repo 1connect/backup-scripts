@@ -84,51 +84,61 @@ do
     fi
 done
 
-# Options to use for rsync
-# (also see http://www.sanitarium.net/golug/rsync_backups.html)
-RSYNCOPTS="--archive --hard-links --one-file-system "
-RSYNCOPTS+="--delete --delete-excluded --numeric-ids "
-
-
-
-RSYNC_RULES="$CONFIG_DIR/$RSYNC_RULES_FILE"
+ATTIC_OPTIONS=""
 
 if [[ $SIDESCRIPTS_ONLY -eq 0 ]]
 then
     if [[ $VERBOSE -ne 0 ]]
     then
-        RSYNCOPTIONS+=" --verbose --progress"
-        echo "* starting rsync"
+        ATTIC_OPTIONS+=" --stats"
+        echo "* starting attic backup"
     fi
+
+    $ECHO sshfs $DST_REMOTE_LOCATION $DST_LOCAL_MOUNT_POINT
 
     for directory in $SRC_DIRECTORIES
     do
-        out="$DST_DIRECTORY/$HOSTNAME"
+        out="$DST_LOCAL_MOUNT_POINT/$HOSTNAME"
+
+        $ECHO mkdir -p $out
+
         if [[ `basename $directory` == '/' ]]
         then
-            out+="/rootdir"
+            out+="/root_dir.attic"
         else
-            out+=/`basename $directory | tr '/' '__' `
+            out+=/`basename $directory | tr '/' '__' `.attic
         fi
 
-        if [[ DST_REMOTE != '' ]]
-        then
-            $ECHO ssh $DST_REMOTE "mkdir -p $out"
-            fullPath="$DST_REMOTE:$out"
-        else
-            $ECHO mkdir -p $out
-            fullPath=$out
-        fi
-
-        # do the backup itself (run a few times, since failing here kills the chain)
-        for i in `seq 1 $RSYNC_RUN_COUNT`
+        # construct exclude list
+        EXCLUDE_LIST=''
+        for entry in `cat ${CONFIG_DIR}/excludes.txt`
         do
-            $ECHO rsync ${RSYNCOPTS} --filter="merge $RSYNC_RULES" $directory $fullPath
+            EXCLUDE_LIST+=" --exclude $entry"
         done
-    done
-fi
 
-# TODO sychronize backup with onedrive etc
+        for entry in $SRC_DIRECTORIES
+        do
+            if [ $entry != $directory ]
+            then
+                if [ "${directory##$entry}" == "${directory}" ]
+                then
+                    EXCLUDE_LIST+=" --exclude $entry"
+                fi
+            fi
+        done
+
+        if [ ! -d $out ]
+        then
+            $ECHO attic init --encryption=keyfile $out
+        fi
+
+        $ECHO attic create $ATTIC_OPTIONS ${out}::$(full_date) $directory $EXCLUDE_LIST
+
+        $ECHO attic prune $ATTIC_OPTIONS ${out} $ATTIC_PRUNE_AGES
+    done
+
+    $ECHO umount $DST_LOCAL_MOUNT_POINT
+fi
 
 # remove lock
 $ECHO rm $PIDFILE

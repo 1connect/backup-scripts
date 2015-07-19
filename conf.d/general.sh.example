@@ -1,18 +1,14 @@
 #!/usr/bin/env bash
 
-# todo
 export SIDE_SCRIPTS_DESTINATION="/backup"
 
-export DST_REMOTE='root@example.org'
-export DST_DIRECTORY='/backup'
+export DST_REMOTE_LOCATION='root@example.org:/data/backup'
+export DST_LOCAL_MOUNT_POINT='/backup'
 
-# they shoud match with the filesystem mount points
+# they should match with the filesystem mount points
 export SRC_DIRECTORIES="/ /boot"
 
-# how many times rsync shoud be run for each directory
-export RSYNC_RUN_COUNT=3
+export ATTIC_EXCLUDE_FILE="excludes.txt"
 
-# file describing rsync exclusions
-# todo support path
-export RSYNC_RULES_FILE="rsync_rules"
+export ATTIC_PRUNE_AGES="--keep-daily=7 --keep-weekly=4 --keep-monthly=4"
 

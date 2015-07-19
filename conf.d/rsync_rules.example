@@ -1,8 +1,0 @@
-# This is the rules file for backup. 
-# For details on the format of this file, consult rsync(1) man page
-
-- /var/lib/mysql
-- /var/lib/postgresql
-
-- /var/tmp
-- /tmp
