@@ -2,8 +2,17 @@
 
 export SIDE_SCRIPTS_DESTINATION="/backup"
 
+# If you want to backup to remote location using sshfs,
+# fill the DST_REMOTE_LOCATION in the format indicated below.
+# DST_LOCAL_LOCATION is just a mount point.
 export DST_REMOTE_LOCATION='root@example.org:/data/backup'
-export DST_LOCAL_MOUNT_POINT='/backup'
+export DST_LOCAL_LOCATION='/tmp/backup'
+
+# If you want to backup to local directory, fill
+# DST_LOCAL_LOCATION with desired path and leave
+# DST_REMOTE_LOCATION blank.
+#export DST_REMOTE_LOCATION=''
+#export DST_LOCAL_LOCATION='/data/backup'
 
 # they should match with the filesystem mount points
 export SRC_DIRECTORIES="/ /boot"

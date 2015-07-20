@@ -94,12 +94,15 @@ then
         echo "* starting attic backup"
     fi
 
-    $ECHO mkdir -p $DST_LOCAL_MOUNT_POINT
-    $ECHO sshfs $DST_REMOTE_LOCATION $DST_LOCAL_MOUNT_POINT
+    if [ -n "$DST_REMOTE_LOCATION" ]
+    then
+        $ECHO mkdir -p $DST_LOCAL_LOCATION
+        $ECHO sshfs $DST_REMOTE_LOCATION $DST_LOCAL_LOCATION
+    fi
 
     for directory in $SRC_DIRECTORIES
     do
-        out="$DST_LOCAL_MOUNT_POINT/$HOSTNAME"
+        out="$DST_LOCAL_LOCATION/$HOSTNAME"
 
         $ECHO mkdir -p $out
 
@@ -111,7 +114,7 @@ then
         fi
 
         # construct exclude list
-        EXCLUDE_LIST=''
+        EXCLUDE_LIST="--exclude $DST_LOCAL_LOCATION "
         for entry in `cat ${CONFIG_DIR}/excludes.txt`
         do
             EXCLUDE_LIST+=" --exclude $entry"
@@ -138,8 +141,11 @@ then
         $ECHO attic prune $ATTIC_OPTIONS ${out} $ATTIC_PRUNE_AGES
     done
 
-    $ECHO umount $DST_LOCAL_MOUNT_POINT
-    $ECHO rmdir $DST_LOCAL_MOUNT_POINT
+    if [ -n "$DST_REMOTE_LOCATION" ]
+    then
+        $ECHO umount $DST_LOCAL_LOCATION
+        $ECHO rmdir $DST_LOCAL_LOCATION
+    fi
 fi
 
 # remove lock
