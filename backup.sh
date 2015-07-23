@@ -136,9 +136,9 @@ then
             $ECHO attic init --encryption=keyfile $out
         fi
 
-        $ECHO attic create $ATTIC_OPTIONS ${out}::$(full_date) $directory $EXCLUDE_LIST
+        $ECHO ionice -c3 -t attic create $ATTIC_OPTIONS ${out}::$(full_date) $directory $EXCLUDE_LIST
 
-        $ECHO attic prune $ATTIC_OPTIONS ${out} $ATTIC_PRUNE_AGES
+        $ECHO ionice -c3 -t attic prune $ATTIC_OPTIONS ${out} $ATTIC_PRUNE_AGES
     done
 
     if [ -n "$DST_REMOTE_LOCATION" ]
