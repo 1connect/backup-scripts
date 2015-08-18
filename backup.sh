@@ -46,7 +46,7 @@ function full_date {
 function run_sidescripts {
     [[ $VERBOSE -ne 0 ]] && echo "** running sidescripts in phase $1"
 
-    for scriptFile in `ls ${SCRIPT_DIR}/${1}.d/*.sh`
+    for scriptFile in `find "${SCRIPT_DIR}" -path '*/'"${1}.d/"'*.sh' | sort -n`
     do
         if [[ `basename $scriptFile` =~ ([0-9]+?)([a-z]+)(\.sh) ]]
         then
@@ -97,7 +97,7 @@ then
     if [[ $VERBOSE -ne 0 ]]
     then
         ATTIC_OPTIONS+=" --stats"
-        echo "* starting attic backup"
+        echo "** starting attic backup"
     fi
 
     if [ -n "$DST_REMOTE_LOCATION" ]
@@ -105,6 +105,8 @@ then
         $ECHO mkdir -p $DST_LOCAL_LOCATION
         $ECHO sshfs $DST_REMOTE_LOCATION $DST_LOCAL_LOCATION
     fi
+
+    run_sidescripts predump
 
     for directory in $SRC_DIRECTORIES
     do
@@ -147,11 +149,15 @@ then
         $ECHO ionice -c3 -t attic prune $ATTIC_OPTIONS ${out} $ATTIC_PRUNE_AGES
     done
 
+    run_sidescripts postdump
+
     if [ -n "$DST_REMOTE_LOCATION" ]
     then
         $ECHO umount $DST_LOCAL_LOCATION
         $ECHO rmdir $DST_LOCAL_LOCATION
     fi
+
+    run_sidescripts postumount
 fi
 
 # remove lock
