@@ -43,6 +43,35 @@ function full_date {
     eval date +'%Y-%m-%d.%H.%M'
 }
 
+function run_sidescripts {
+    [[ $VERBOSE -ne 0 ]] && echo "** running sidescripts in phase $1"
+
+    for scriptFile in `ls ${SCRIPT_DIR}/${1}.d/*.sh`
+    do
+        if [[ `basename $scriptFile` =~ ([0-9]+?)([a-z]+)(\.sh) ]]
+        then
+            scriptName=${BASH_REMATCH[2]}
+            scriptEnabledVariableName=`echo ${1}_${scriptName} | tr [a-z] [A-Z]`_ENABLED
+
+            if [[ ${!scriptEnabledVariableName} -ne 1 ]]
+            then
+                continue
+            fi
+
+            export SCRIPT_TMP_DIR=`mktemp -d --suffix=_${1}_${scriptName}`
+
+            currentDir=`pwd`
+            cd $SCRIPT_TMP_DIR
+
+    	    [[ $VERBOSE -ne 0 ]] && echo "* running $scriptName"
+    	    bash $scriptFile
+
+    	    cd $currentDir
+    	    rm -r $SCRIPT_TMP_DIR
+        fi
+    done
+}
+
 export -f full_date
 
 # put lock
@@ -59,31 +88,7 @@ fi
 
 [[ $ECHO != '' ]] && echo "echo $$ > $PIDFILE" || echo $$ > $PIDFILE
 
-# running premount scripts
-for scriptFile in `ls ${SCRIPT_DIR}/premount.d/*.sh`
-do
-    if [[ `basename $scriptFile` =~ ([0-9]+?)([a-z]+)(\.sh) ]]
-    then
-        scriptName=${BASH_REMATCH[2]}
-        scriptEnabledVariableName=PREMOUNT_`echo $scriptName | tr [a-z] [A-Z]`_ENABLED
-
-        if [[ ${!scriptEnabledVariableName} -ne 1 ]]
-        then
-            continue
-        fi
-
-        export SCRIPT_TMP_DIR=`mktemp -d --suffix=_premount_${scriptName}`
-
-        currentDir=`pwd`
-        cd $SCRIPT_TMP_DIR
-
-	    [[ $VERBOSE -ne 0 ]] && echo "* running $scriptName"
-	    bash $scriptFile
-
-	    cd $currentDir
-	    rm -r $SCRIPT_TMP_DIR
-    fi
-done
+run_sidescripts premount
 
 ATTIC_OPTIONS=""
 
