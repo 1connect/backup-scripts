@@ -108,17 +108,22 @@ then
 
     run_sidescripts predump
 
+    out="$DST_LOCAL_LOCATION/$HOSTNAME"
+    $ECHO mkdir -p $out
+    out+='/repository.attic'
+
+    if [ ! -d $out ]
+    then
+        $ECHO attic init --encryption=keyfile $out
+    fi
+
     for directory in $SRC_DIRECTORIES
     do
-        out="$DST_LOCAL_LOCATION/$HOSTNAME"
-
-        $ECHO mkdir -p $out
-
         if [[ `basename $directory` == '/' ]]
         then
-            out+="/root_dir.attic"
+            prefix="root_dir"
         else
-            out+=/`basename $directory | tr '/' '__' `.attic
+            prefix=`basename $directory | tr '/' '__' `
         fi
 
         # construct exclude list
@@ -139,15 +144,10 @@ then
             fi
         done
 
-        if [ ! -d $out ]
-        then
-            $ECHO attic init --encryption=keyfile $out
-        fi
-
-        $ECHO ionice -c3 -t attic create $ATTIC_OPTIONS ${out}::$(full_date) $directory $EXCLUDE_LIST
-
-        $ECHO ionice -c3 -t attic prune $ATTIC_OPTIONS ${out} $ATTIC_PRUNE_AGES
+        $ECHO ionice -c3 -t attic create $ATTIC_OPTIONS ${out}::$(full_date)-${prefix} $directory $EXCLUDE_LIST
     done
+
+    $ECHO ionice -c3 -t attic prune $ATTIC_OPTIONS ${out} $ATTIC_PRUNE_AGES
 
     run_sidescripts postdump
 
