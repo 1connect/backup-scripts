@@ -25,7 +25,7 @@ do
     $ECHO chmod 0400 ${fileName}.bz2
 done
 
-for i in `find . -type d -mtime +${POSTGRESQL_DELETE_FILES_OLDER_THAN} | sort`
+for i in `find . -type d -mtime +${PREMOUNT_POSTGRESQL_DELETE_FILES_OLDER_THAN} | sort`
 do
     $ECHO rm -r $i
     [[ $VERBOSE -ne 0 ]] && echo "* removed $i"

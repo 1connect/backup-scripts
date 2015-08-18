@@ -20,7 +20,7 @@ EOF
 
 $ECHO rm $ARCHIVE.bz2
 
-PAST_DATE=`date --date="$FTP_DELETE_FILES_OLDER_THAN days ago" +%s`
+PAST_DATE=`date --date="$PREMOUNT_FTP_DELETE_FILES_OLDER_THAN days ago" +%s`
 
 listing=`ftp -n $FTP_HOST << EOF2
 user $FTP_LOGIN $FTP_PASSWORD

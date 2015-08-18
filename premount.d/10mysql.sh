@@ -25,7 +25,7 @@ do
     fi
 done
 
-for i in `find . -type d -mtime +${MYSQL_DELETE_FILES_OLDER_THAN} | sort`
+for i in `find . -type d -mtime +${PREMOUNT_MYSQL_DELETE_FILES_OLDER_THAN} | sort`
 do
     $ECHO rm -r $i
     [[ $VERBOSE -ne 0 ]] && echo "* removed $i"
