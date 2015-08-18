@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-export FTP_ENABLED=1
+export PREMOUNT_FTP_ENABLED=1
+
+export PREMOUNT_FTP_INPUT_DIR='/backup'
 
 export FTP_HOST=ftp.example.org
 export FTP_LOGIN=login

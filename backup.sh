@@ -59,28 +59,29 @@ fi
 
 [[ $ECHO != '' ]] && echo "echo $$ > $PIDFILE" || echo $$ > $PIDFILE
 
-for scriptFile in `ls ${SCRIPT_DIR}/*.sh`
+# running premount scripts
+for scriptFile in `ls ${SCRIPT_DIR}/premount.d/*.sh`
 do
-    if [[ `basename $scriptFile` =~ ([0-9]+?)([a-z]+)(_sidescript\.sh) ]]
+    if [[ `basename $scriptFile` =~ ([0-9]+?)([a-z]+)(\.sh) ]]
     then
         scriptName=${BASH_REMATCH[2]}
-        scriptEnabledVariableName=`echo $scriptName | tr [a-z] [A-Z]`_ENABLED
+        scriptEnabledVariableName=PREMOUNT_`echo $scriptName | tr [a-z] [A-Z]`_ENABLED
 
-        if [[ ${!scriptEnabledVariableName} -eq 0 ]]
+        if [[ ${!scriptEnabledVariableName} -ne 1 ]]
         then
             continue
         fi
 
-        export SCRIPT_OUTPUT_DIR="${SIDE_SCRIPTS_DESTINATION}/${scriptName}"
-
-        $ECHO mkdir -p $SCRIPT_OUTPUT_DIR
-
-        [[ $VERBOSE -ne 0 ]] && echo "* running $scriptName"
+        export SCRIPT_TMP_DIR=`mktemp -d --suffix=_premount_${scriptName}`
 
         currentDir=`pwd`
-        cd $SCRIPT_OUTPUT_DIR
+        cd $SCRIPT_TMP_DIR
+
+	    [[ $VERBOSE -ne 0 ]] && echo "* running $scriptName"
 	    bash $scriptFile
+
 	    cd $currentDir
+	    rm -r $SCRIPT_TMP_DIR
     fi
 done
 

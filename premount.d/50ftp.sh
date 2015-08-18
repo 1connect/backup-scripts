@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-cd ..
-
-$ECHO rmdir ftp
-
+cd $PREMOUNT_FTP_INPUT_DIR
 
 ARCHIVE="/tmp/db-${HOSTNAME}-`date +%Y-%m-%d`_`date +%s`.tar"
 

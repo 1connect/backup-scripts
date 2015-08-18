@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-export SIDE_SCRIPTS_DESTINATION="/backup"
-
 # If you want to backup to remote location using sshfs,
 # fill the DST_REMOTE_LOCATION in the format indicated below.
 # DST_LOCAL_LOCATION is just a mount point.

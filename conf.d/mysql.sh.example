@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-export MYSQL_ENABLED=1
+export PREMOUNT_MYSQL_ENABLED=1
+export PREMOUNT_MYSQL_OUTPUT_DIR='/backup/mysql'
 
 export MYSQL_DELETE_FILES_OLDER_THAN=20

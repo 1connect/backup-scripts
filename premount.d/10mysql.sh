@@ -7,8 +7,10 @@ MYSQL_OPTIONS+=" --ignore-table=mysql.event --single-transaction --extended-inse
 
 [[ $VERBOSE -ne 0 ]] && MYSQL_OPTIONS+=" --verbose"
 
+cd $PREMOUNT_MYSQL_OUTPUT_DIR
+
 DATE="$(full_date)"
-$ECHO mkdir $DATE
+$ECHO mkdir -p $DATE
 
 for DATABASE in $DBS
 do

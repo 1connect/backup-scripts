@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd $PREMOUNT_POSTGRESQL_OUTPUT_DIR
+
 INVOCATION="$ECHO sudo -u $POSTGRESQL_SUDO_USER"
 DATABASES=$(sudo -u $POSTGRESQL_SUDO_USER psql -tqc 'SELECT datname FROM pg_database where datistemplate = false;')
 
@@ -8,7 +10,7 @@ PG_OPTIONS="--clean "
 [[ $VERBOSE -ne 0 ]] &&  PG_OPTIONS+=" --verbose"
 
 DATE="$(full_date)"
-$ECHO mkdir $DATE
+$ECHO mkdir -p $DATE
 $ECHO chown -R postgres .
 
 # dump globals

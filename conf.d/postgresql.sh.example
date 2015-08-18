@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-export POSTGRESQL_ENABLED=1
+export PREMOUNT_POSTGRESQL_ENABLED=1
+
+export PREMOUNT_POSTGRESQL_OUTPUT_DIR='/backup/postgresql'
 
 export POSTGRESQL_SUDO_USER=postgres
 
