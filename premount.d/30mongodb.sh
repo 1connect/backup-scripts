@@ -2,6 +2,8 @@
 
 [[ $VERBOSE -eq 0 ]] && MONGODB_OPTIONS+=" --quiet "
 
+[[ $VERBOSE -eq 1 ]] && TAR_OPTIONS+=" -v "
+
 cd $PREMOUNT_MONGODB_OUTPUT_DIR
 
 DATE="$(full_date)"
@@ -20,8 +22,8 @@ cd ${BASEDIR}
 for dbDir in `ls`
 do
     ARCHIVE="${dbDir}.tar.bz2"
-    $ECHO tar -cvjSf ${ARCHIVE} ${dbDir}
-    $ECHO rm -r ${ARCHIVE}
+    $ECHO tar -cjSf $TAR_OPTIONS ${ARCHIVE} ${dbDir}
+    $ECHO rm -r ${dbDir}
     $ECHO chmod 0400 ${ARCHIVE}
 done
 
