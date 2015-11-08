@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-cd $PREMOUNT_POSTGRESQL_OUTPUT_DIR
+$ECHO mkdir -p ${PREMOUNT_POSTGRESQL_OUTPUT_DIR}
+cd ${PREMOUNT_POSTGRESQL_OUTPUT_DIR}
 
 INVOCATION="$ECHO sudo -u $POSTGRESQL_SUDO_USER"
 DATABASES=$(sudo -u $POSTGRESQL_SUDO_USER psql -tqc 'SELECT datname FROM pg_database where datistemplate = false;')

@@ -4,7 +4,8 @@
 
 [[ $VERBOSE -eq 1 ]] && TAR_OPTIONS+=" -v "
 
-cd $PREMOUNT_MONGODB_OUTPUT_DIR
+$ECHO mkdir -p ${PREMOUNT_MONGODB_OUTPUT_DIR}
+cd ${PREMOUNT_MONGODB_OUTPUT_DIR}
 
 DATE="$(full_date)"
 $ECHO mkdir -p $DATE
