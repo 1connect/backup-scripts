@@ -25,6 +25,10 @@ The backup points have standardized names `{date}.{time}-{mount point}`. Example
 
 The plain file dump doesn't guarantee the database consistency. To address this issue, there are *premount* scripts, which dump PostgreSQL, MySQL and MongoDB databases to SQL files. Each database has it's separate file/directory, which is compressed and put into some directory in the filesystem (*/backup*) by default.
 
+## Master Boot Record backup
+
+Scripts dumps first 512 bytes for each drive defined in `PREMOUNT_MBR_PHYSICAL_DEVICES`. This area contains the MBR and partition table.
+
 ## Installation
 
 * Checkout the repository, preferable to *root*'s home directory:
