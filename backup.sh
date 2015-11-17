@@ -47,7 +47,7 @@ function run_sidescripts {
 
     for scriptFile in `find "${SCRIPT_DIR}" -path '*/'"${1}.d/"'*.sh' | sort -n`
     do
-        if [[ `basename ${scriptFile}` =~ ([0-9]+?)([a-z]+)(\.sh) ]]
+        if [[ `basename ${scriptFile}` =~ ([0-9]+?)([a-z_]+)(\.sh) ]]
         then
             scriptName=${BASH_REMATCH[2]}
             scriptEnabledVariableName=`echo ${1}_${scriptName} | tr [a-z] [A-Z]`_ENABLED
@@ -93,13 +93,7 @@ ATTIC_OPTIONS=""
 
 if [[ ${SIDE_SCRIPTS_ONLY} -eq 0 ]]
 then
-    if [[ ${VERBOSE} -ne 0 ]]
-    then
-        ATTIC_OPTIONS+=" --stats"
-        echo "** starting attic backup"
-    fi
-
-    if [ -n ${DST_REMOTE_LOCATION} ]
+    if [ -n "${DST_REMOTE_LOCATION}" ]
     then
         ${ECHO} mkdir -p ${DST_LOCAL_LOCATION}
         ${ECHO} sshfs ${DST_REMOTE_LOCATION} ${DST_LOCAL_LOCATION}
@@ -111,6 +105,12 @@ then
     ${ECHO} mkdir -p ${out}
     out+='/repository.attic'
     export ATTIC_REPOSITORY_PATH="${out}"
+
+    if [[ "${VERBOSE}" -ne 0 ]]
+    then
+        ATTIC_OPTIONS+=" --stats"
+        echo "** starting attic backup"
+    fi
 
     if [ ! -d ${ATTIC_REPOSITORY_PATH} ]
     then
