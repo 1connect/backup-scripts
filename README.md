@@ -29,6 +29,10 @@ The plain file dump doesn't guarantee the database consistency. To address this 
 
 Scripts dumps first 512 bytes for each drive defined in `PREMOUNT_MBR_PHYSICAL_DEVICES`. This area contains the MBR and partition table.
 
+## Copying Attic repository to secondary location
+
+`copy_attic_repository_rsync` side script can be used to copy the Attic repository to secondary remote location, which increases survivability in case of storage failure.
+
 ## Installation
 
 * Checkout the repository, preferable to *root*'s home directory:
