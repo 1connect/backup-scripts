@@ -35,6 +35,12 @@ Scripts dumps first 512 bytes for each drive defined in `PREMOUNT_MBR_PHYSICAL_D
 
 ## Installation
 
+* Install required packages:
+
+```bash
+aptitude install sshfs attic rsync
+```
+
 * Checkout the repository, preferable to *root*'s home directory:
 
 ```
