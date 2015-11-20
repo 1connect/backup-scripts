@@ -96,7 +96,7 @@ then
     if [ -n "${DST_REMOTE_LOCATION}" ]
     then
         ${ECHO} mkdir -p ${DST_LOCAL_LOCATION}
-        ${ECHO} sshfs ${DST_REMOTE_LOCATION} ${DST_LOCAL_LOCATION}
+        ${ECHO} sshfs -p ${DST_REMOTE_PORT} ${DST_REMOTE_USER}@${DST_REMOTE_HOST}:${DST_REMOTE_LOCATION} ${DST_LOCAL_LOCATION}
     fi
 
     run_sidescripts predump
@@ -150,6 +150,8 @@ then
     ${ECHO} ionice -c3 -t attic prune ${ATTIC_OPTIONS} ${ATTIC_REPOSITORY_PATH} ${ATTIC_PRUNE_AGES}
 
     run_sidescripts postdump
+
+    sleep 3
 
     if [ -n "${DST_REMOTE_LOCATION}" ]
     then
