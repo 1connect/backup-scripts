@@ -83,6 +83,15 @@ attic mount /my/backup/storage/myhostname/repository.attic::{backup point} /tmp/
 
 **Warning!** Because of bug present in Attic, you always have to provide the full path to the repository.
 
+### Restore MongoDB
+
+These commands will erase the content from the database and replace it with version from the backup.
+```
+cd /backup/mongodb/{date}
+tar xf {database}.tar.bz2
+mongorestore --db {database} --drop {database}
+```
+
 ## Encryption keys
 
 Attic stores its encryption keys in `~/.attic/keys`. Remember to backup them separately; you won't be able to use your backup if you loose them!
