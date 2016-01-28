@@ -2,7 +2,7 @@
 
 #
 # server backup script
-# 2015 Michał Słomkowski
+# 2015, 2016 Michał Słomkowski
 #
 
 export TEST=0
@@ -114,7 +114,7 @@ then
 
     if [ ! -d ${ATTIC_REPOSITORY_PATH} ]
     then
-        ${ECHO} attic init --encryption=keyfile ${ATTIC_REPOSITORY_PATH}
+        ${ECHO} attic init --encryption=${ENCRYPTION_MODE} ${ATTIC_REPOSITORY_PATH}
     fi
 
     for directory in ${SRC_DIRECTORIES}

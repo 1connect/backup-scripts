@@ -94,7 +94,7 @@ mongorestore --db {database} --drop {database}
 
 ## Encryption keys
 
-Attic stores its encryption keys in `~/.attic/keys`. Remember to backup them separately; you won't be able to use your backup if you loose them!
+If you enabled encryption, Attic stores the encryption keys in `~/.attic/keys`. Remember to backup them separately; you won't be able to use your backup if you loose them!
 
 
 

@@ -15,10 +15,16 @@ export DST_LOCAL_LOCATION='/tmp/backup'
 #export DST_REMOTE_LOCATION=''
 #export DST_LOCAL_LOCATION='/data/backup'
 
+# You should set whether you want to encrypt your backup
+# valid values are: none, keyfile
+#export ENCRYPTION_MODE=none
+export ENCRYPTION_MODE=keyfile
+
 # they should match with the filesystem mount points
 export SRC_DIRECTORIES="/ /boot"
 
 export ATTIC_EXCLUDE_FILE="excludes.txt"
 
-export ATTIC_PRUNE_AGES="--keep-daily=7 --keep-weekly=4 --keep-monthly=4"
+export ATTIC_PRUNE_AGES="--keep-within=14d --keep-weekly=8 --keep-monthly=6"
+
 
