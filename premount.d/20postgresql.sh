@@ -14,6 +14,12 @@ DATE="$(full_date)"
 ${ECHO} mkdir -p ${DATE}
 ${ECHO} chown -R postgres .
 
+if which lbzip2 > /dev/null; then
+    COMPRESS_COMMAND="nice -n 18 lbzip2"
+else
+    COMPRESS_COMMAND="nice -n 18 bzip2"
+fi
+
 # dump globals
 ${INVOCATION} pg_dumpall ${PG_OPTIONS} --globals-only -f ${DATE}/${DATE}-globals.sql
 
@@ -22,7 +28,7 @@ do
     [[ ${VERBOSE} -ne 0 ]] && echo "* dumping $d database"
     fileName="${DATE}/${DATE}-db-$d.sql"
     ${INVOCATION} pg_dump ${PG_OPTIONS} -f ${fileName} ${d}
-    ${ECHO} bzip2 -f9 ${fileName}
+    ${ECHO} ${COMPRESS_COMMAND} -f9 ${fileName}
     ${ECHO} chmod 0400 ${fileName}.bz2
 done
 
