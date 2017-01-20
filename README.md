@@ -2,7 +2,7 @@
 
 This is a collections of scripts, which automate the backup process of Linux server using [Attic](https://attic-backup.org/), a deduplicating backup tool. 
 
-The starting point is `*backup.sh`, which works in following way:
+The starting point is `backup.sh`, which works in following way:
 * The scripts starts.
 * **premount** scripts are executed.
 * If Attic repository is remote, it's mounted.
@@ -75,7 +75,13 @@ The very first run deduplicates your whole filesystem, it'll take long. The subs
 
 ## Restore data
 
-The most convenient way is to use Attic *mount* feature:
+List list existing backups and choose the one which suits your needs the best.
+
+```
+attic list /my/backup/storage/myhostname/repository.attic/
+```
+
+Then access the files. The most convenient way is to use Attic *mount* feature:
 
 ```
 attic mount /my/backup/storage/myhostname/repository.attic::{backup point} /tmp/restore
@@ -83,14 +89,6 @@ attic mount /my/backup/storage/myhostname/repository.attic::{backup point} /tmp/
 
 **Warning!** Because of bug present in Attic, you always have to provide the full path to the repository.
 
-
-## List mounting points 
-
-To get list of mounting points (`{backup point}` from [Restore data](#restore-data)):
-
-```
-attic list /my/backup/storage/myhostname/repository.attic/
-```
 
 ### Restore MongoDB
 
