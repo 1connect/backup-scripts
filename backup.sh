@@ -89,7 +89,7 @@ fi
 
 run_sidescripts premount
 
-ATTIC_OPTIONS=""
+BORG_OPTIONS=""
 
 if [[ ${SIDE_SCRIPTS_ONLY} -eq 0 ]]
 then
@@ -103,18 +103,20 @@ then
 
     out="${DST_LOCAL_LOCATION}/${HOSTNAME}"
     ${ECHO} mkdir -p ${out}
-    out+='/repository.attic'
-    export ATTIC_REPOSITORY_PATH="${out}"
+    out+='/repository.borg'
+    export BORG_REPOSITORY_PATH="${out}"
 
     if [[ "${VERBOSE}" -ne 0 ]]
     then
-        ATTIC_OPTIONS+=" --stats"
-        echo "** starting attic backup"
+        BORG_OPTIONS+=" --stats"
+        echo "** starting Borg backup"
     fi
 
-    if [ ! -d ${ATTIC_REPOSITORY_PATH} ]
+    export BORG_PASSPHRASE='backup'
+
+    if [ ! -d ${BORG_REPOSITORY_PATH} ]
     then
-        ${ECHO} attic init --encryption=${ENCRYPTION_MODE} ${ATTIC_REPOSITORY_PATH}
+        ${ECHO} borg init --encryption=${ENCRYPTION_MODE} ${BORG_REPOSITORY_PATH}
     fi
 
     for directory in ${SRC_DIRECTORIES}
@@ -144,10 +146,10 @@ then
             fi
         done
 
-        ${ECHO} ionice -c3 -t attic create ${ATTIC_OPTIONS} ${ATTIC_REPOSITORY_PATH}::$(full_date)-${prefix} ${directory} ${EXCLUDE_LIST}
+        ${ECHO} ionice -c3 -t borg create ${BORG_OPTIONS} ${BORG_REPOSITORY_PATH}::$(full_date)-${prefix} ${directory} ${EXCLUDE_LIST}
     done
 
-    ${ECHO} ionice -c3 -t attic prune ${ATTIC_OPTIONS} ${ATTIC_REPOSITORY_PATH} ${ATTIC_PRUNE_AGES}
+    ${ECHO} ionice -c3 -t borg prune ${BORG_OPTIONS} ${BORG_REPOSITORY_PATH} ${BORG_PRUNE_AGES}
 
     run_sidescripts postdump
 

@@ -17,14 +17,15 @@ export DST_LOCAL_LOCATION='/tmp/backup'
 
 # You should set whether you want to encrypt your backup
 # valid values are: none, keyfile
+# don't use repokey mode since standard password 'backup' is provided to Borg calls
 #export ENCRYPTION_MODE=none
 export ENCRYPTION_MODE=keyfile
 
 # they should match with the filesystem mount points
 export SRC_DIRECTORIES="/ /boot"
 
-export ATTIC_EXCLUDE_FILE="excludes.txt"
+export BORG_EXCLUDE_FILE="excludes.txt"
 
-export ATTIC_PRUNE_AGES="--keep-within=14d --keep-weekly=8 --keep-monthly=6"
+export BORG_PRUNE_AGES="--keep-within=14d --keep-weekly=8 --keep-monthly=6"
 
 

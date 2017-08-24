@@ -2,8 +2,11 @@
 
 # config files
 conf.d/*
-!conf.d/*.example
+!conf.d/example-*.sh
+!conf.d/example-excludes.txt
 
 # IntelliJ
 *.iml
 .idea/
+
+_deploy*.sh
