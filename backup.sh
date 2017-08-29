@@ -33,7 +33,7 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 export CONFIG_DIR="${SCRIPT_DIR}/conf.d"
 
 # load all config files
-for confFile in `ls ${CONFIG_DIR}/*.sh`
+for confFile in `find "${CONFIG_DIR}" -name '*.sh' ! -name 'example-*'`
 do
     . "${confFile}"
 done
