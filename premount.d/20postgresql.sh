@@ -27,7 +27,7 @@ for d in ${DATABASES}
 do
     [[ ${VERBOSE} -ne 0 ]] && echo "* dumping $d database"
     fileName="${DATE}/${DATE}-db-$d.sql"
-    ${INVOCATION} pg_dump ${PG_OPTIONS} -f ${fileName} ${d}
+    ${INVOCATION} pg_dump ${PG_OPTIONS} ${PREMOUNT_POSTGRESQL_PGDUMP_OPTIONS} -f ${fileName} ${d}
     ${ECHO} ${COMPRESS_COMMAND} -f9 ${fileName}
     ${ECHO} chmod 0400 ${fileName}.bz2
 done
