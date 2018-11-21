@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-RSYNC_OPTIONS="--recursive --timeout=60 --compress --safe-links --delete --one-file-system"
+RSYNC_OPTIONS="--recursive --timeout=60 --compress --safe-links --update --delete --one-file-system"
 
 [[ ${VERBOSE} -ne 0 ]] && RSYNC_OPTIONS+=" --progress --stats --verbose --human-readable "
 
