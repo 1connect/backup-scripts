@@ -2,9 +2,11 @@
 
 [[ ${VERBOSE} -eq 0 ]] && MONGODB_OPTIONS+=" --quiet "
 
-TAR_OPTIONS='-cjSf'
+TAR_OPTIONS='-cjS'
 
 [[ ${VERBOSE} -eq 1 ]] && TAR_OPTIONS+='v'
+
+TAR_OPTIONS+='f'
 
 ${ECHO} mkdir -p ${PREMOUNT_MONGODB_OUTPUT_DIR}
 cd ${PREMOUNT_MONGODB_OUTPUT_DIR}
