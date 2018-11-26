@@ -90,6 +90,8 @@ fi
 run_sidescripts premount
 
 BORG_OPTIONS=""
+export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
+export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 
 if [[ ${SIDE_SCRIPTS_ONLY} -eq 0 ]]
 then
