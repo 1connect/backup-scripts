@@ -50,7 +50,7 @@ function run_sidescripts {
         if [[ `basename ${scriptFile}` =~ ([0-9]+?)([a-z_]+)(\.sh) ]]
         then
             scriptName=${BASH_REMATCH[2]}
-            scriptEnabledVariableName=`echo ${1}_${scriptName} | tr [a-z] [A-Z]`_ENABLED
+            scriptEnabledVariableName=`echo ${1}_${scriptName} | tr '[a-z]' '[A-Z]'`_ENABLED
 
             if [[ ${!scriptEnabledVariableName} -ne 1 ]]
             then
