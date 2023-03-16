@@ -11,7 +11,7 @@ The starting point is `backup.sh`, which works in following way:
 * **postdump** scripts are executed.
 * If the repository is remote, it's unmounted.
 * **postmount** scripts are executed.
-* The scripts finishes.
+* The scripts finish.
 
 ## Filesystem backup
 
@@ -67,7 +67,7 @@ The very first run deduplicates your whole filesystem, it'll take long. The subs
 
 * Run the script the second time without the `-v` option. You shouldn't see any output.
 
-* Add the script to Cron daemon. Edit your crontab with `crontab -e` command and add the following line to have it run everyday at 0:25:
+* Add the script to Cron daemon. Edit your crontab with `crontab -e` command and add the following line to have it run every day at 0:25:
 
 ```
 25 0 * * * /root/backup-scripts/backup.sh
@@ -75,7 +75,7 @@ The very first run deduplicates your whole filesystem, it'll take long. The subs
 
 ## Restore data
 
-List list existing backups and choose the one which suits your needs the best.
+List existing backups and choose the one which suits your needs the best.
 
 ```
 borg list /my/backup/storage/myhostname/repository.borg/
@@ -98,7 +98,7 @@ mongorestore --db {database} --drop {database}
 
 ## Encryption keys
 
-If you enabled encryption, Borg stores the encryption keys in `~/.config/borg/keys`. All keys are encrypted with password `backup`. The key to the security is to hold them in secure location. Remember to backup them separately; you won't be able to use your backup if you loose them!
+If you enabled encryption, Borg stores the encryption keys in `~/.config/borg/keys`. All keys are encrypted with password `backup`. The key to the security is to hold them in secure location. Remember to back up them separately; you won't be able to use your backup if you loose them!
 
 
 

@@ -146,7 +146,7 @@ then
             fi
         done
 
-        ${ECHO} ionice -c3 -t borg create ${BORG_OPTIONS} ${BORG_REPOSITORY_PATH}::$(full_date)-${prefix} ${directory} ${EXCLUDE_LIST}
+        ${ECHO} ionice -c3 -t borg create ${BORG_OPTIONS} --one-file-system ${BORG_REPOSITORY_PATH}::$(full_date)-${prefix} ${directory} ${EXCLUDE_LIST}
     done
 
     ${ECHO} ionice -c3 -t borg prune ${BORG_OPTIONS} ${BORG_REPOSITORY_PATH} ${BORG_PRUNE_AGES}

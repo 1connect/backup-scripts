@@ -17,7 +17,7 @@ export DST_LOCAL_LOCATION='/tmp/backup'
 
 # You should set whether you want to encrypt your backup
 # valid values are: none, keyfile
-# don't use repokey mode since standard password 'backup' is provided to Borg calls
+# don't use 'repokey' mode since standard password 'backup' is provided to Borg calls
 #export ENCRYPTION_MODE=none
 export ENCRYPTION_MODE=keyfile
 
