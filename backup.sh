@@ -33,7 +33,7 @@ SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 export CONFIG_DIR="${SCRIPT_DIR}/conf.d"
 
 # load all config files
-for confFile in `ls ${CONFIG_DIR}/*.sh`
+for confFile in `find "${CONFIG_DIR}" -name '*.sh' ! -name 'example-*'`
 do
     . "${confFile}"
 done
@@ -50,7 +50,7 @@ function run_sidescripts {
         if [[ `basename ${scriptFile}` =~ ([0-9]+?)([a-z_]+)(\.sh) ]]
         then
             scriptName=${BASH_REMATCH[2]}
-            scriptEnabledVariableName=`echo ${1}_${scriptName} | tr [a-z] [A-Z]`_ENABLED
+            scriptEnabledVariableName=`echo ${1}_${scriptName} | tr '[a-z]' '[A-Z]'`_ENABLED
 
             if [[ ${!scriptEnabledVariableName} -ne 1 ]]
             then
@@ -90,6 +90,8 @@ fi
 run_sidescripts premount
 
 BORG_OPTIONS=""
+export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
+export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 
 if [[ ${SIDE_SCRIPTS_ONLY} -eq 0 ]]
 then
